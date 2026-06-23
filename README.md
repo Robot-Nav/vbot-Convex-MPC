@@ -19,23 +19,25 @@ sim2sim演示
 
 https://github.com/user-attachments/assets/6c744851-63ee-4630-8fd7-0f04a32facda
 
-
+原地踏步
 
 
 https://github.com/user-attachments/assets/d9816d35-9ff2-4628-94db-f3e3b26c3b51
 
-
+行走
 
 
 sim2real演示
 
 
 
-https://github.com/user-attachments/assets/fb905573-4422-4f0c-98f6-1c43e471c815
+https://github.com/user-attachments/assets/a360ee6a-e0d4-436f-8794-5670a9e3a0ea
 
-https://github.com/user-attachments/assets/5272fd4f-0830-41c2-9dce-312dbec5bef5
+原地踏步
 
+https://github.com/user-attachments/assets/c6f30c1f-8ebe-4a16-9d67-2a2de3d65713
 
+行走
 
 
 > PS：原项目提出MPC求解总体过程约2.7ms，但后期sim2real测试中，整体控制循环包含了MPC求解、轨迹生成、状态更新以及通信延时等等，实机时间约60ms，约15hz，因此对源代码进行了代码优化以及参数调整，例如摆腿过程等，最后可达30-40hz，满足实时性；
