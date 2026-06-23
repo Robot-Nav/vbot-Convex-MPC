@@ -19,8 +19,8 @@
 
 | 动作 | 演示 |
 |:---:|:---:|
-| **原地踏步** | <video src="https://github.com/user-attachments/assets/6c744851-63ee-4630-8fd7-0f04a32facda" width="100%" controls muted autoplay loop></video> |
-| **行走** | <video src="https://github.com/user-attachments/assets/d9816d35-9ff2-4628-94db-f3e3b26c3b51" width="100%" controls muted autoplay loop></video> |
+| **原地踏步** | <video src="https://github.com/user-attachments/assets/a618116c-198a-4b17-a03b-37eece4039fa" width="100%" controls muted autoplay loop></video> |
+| **行走** | <video src="https://github.com/user-attachments/assets/f4262447-482b-429c-a425-f49a812af3a3" width="100%" controls muted autoplay loop></video> |
 
 ---
 
