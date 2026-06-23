@@ -1,0 +1,44 @@
+base_body: base
+floating_joint: joint_fixed_world
+
+# MPC force/torque vector order. Keep this consistent with the original
+# controller: [FL, FR, RL, RR], each leg [hip, thigh, calf].
+mpc_leg_order: [FL, FR, RL, RR]
+
+# Pinocchio joint order in the simplified VBot MJCF.
+pin_leg_order: [FR, FL, RR, RL]
+
+# MuJoCo actuator order in the original VBot XML.
+mujoco_leg_order: [FR, FL, RR, RL]
+
+joints:
+  FL: [FL_hip_joint, FL_thigh_joint, FL_calf_joint]
+  FR: [FR_hip_joint, FR_thigh_joint, FR_calf_joint]
+  RL: [RL_hip_joint, RL_thigh_joint, RL_calf_joint]
+  RR: [RR_hip_joint, RR_thigh_joint, RR_calf_joint]
+
+feet:
+  FL: FL_foot
+  FR: FR_foot
+  RL: RL_foot
+  RR: RR_foot
+
+foot_geoms:
+  FL: FL
+  FR: FR
+  RL: RL
+  RR: RR
+
+default_base_pos: [0.0, 0.0, 0.462]
+default_base_quat_xyzw: [0.0, 0.0, 0.0, 1.0]
+
+default_joint_angles:
+  FL: [0.0, 0.9, -1.8]
+  FR: [-0.0, 0.9, -1.8]
+  RL: [0.0, 0.9, -1.8]
+  RR: [-0.0, 0.9, -1.8]
+
+torque_limits:
+  hip: 17.0
+  thigh: 17.0
+  calf: 34.0

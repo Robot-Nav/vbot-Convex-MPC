@@ -1,0 +1,29 @@
+stand:
+  FR_hip_joint: -0.0
+  FR_thigh_joint: 0.9
+  FR_calf_joint: -1.8
+  FL_hip_joint: 0.0
+  FL_thigh_joint: 0.9
+  FL_calf_joint: -1.8
+  RR_hip_joint: -0.0
+  RR_thigh_joint: 0.9
+  RR_calf_joint: -1.8
+  RL_hip_joint: 0.0
+  RL_thigh_joint: 0.9
+  RL_calf_joint: -1.8
+down:
+  FR_hip_joint: -0.02
+  FR_thigh_joint: 1.08
+  FR_calf_joint: -2.64
+
+  FL_hip_joint: 0.03
+  FL_thigh_joint: 1.08
+  FL_calf_joint: -2.64
+
+  RR_hip_joint: -0.05
+  RR_thigh_joint: 1.08
+  RR_calf_joint: -2.64
+
+  RL_hip_joint: 0.06
+  RL_thigh_joint: 1.08
+  RL_calf_joint: -2.64

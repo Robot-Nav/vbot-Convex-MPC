@@ -1,0 +1,84 @@
+convention:
+  q_model: scale * q_motor - bias
+  dq_model: scale * dq_motor
+  q_motor_cmd: (q_model_cmd + bias) / scale
+  tau_motor_cmd: scale * tau_model_cmd
+  kp_motor_cmd: kp_model_cmd
+  kd_motor_cmd: kd_model_cmd
+  scale_mode: sign_and_gear
+  bias_mode: fallback_static_or_startup_prone_anchor
+  bias_source: joint_prone_bias.fatu.txt
+  strict_anchor_check: false
+  note: bias sign matches joint_prone_bias.fatu.txt, so bias = scale*q_motor_down - q_model_down. Calf scale includes the measured 2:1 gear ratio, so |scale| is 0.5 for calf joints. For real MPC bring-up, prefer --prone-calibrate-on-start so the current powered-on prone pose anchors the bias.
+dds_joint_order:
+- FR_hip_joint
+- FR_thigh_joint
+- FR_calf_joint
+- FL_hip_joint
+- FL_thigh_joint
+- FL_calf_joint
+- RR_hip_joint
+- RR_thigh_joint
+- RR_calf_joint
+- RL_hip_joint
+- RL_thigh_joint
+- RL_calf_joint
+real_down: /home/lushilin/vbot_mpc_ws/down.yaml
+real_stand: /home/lushilin/vbot_mpc_ws/stand.yaml
+model_poses: /home/lushilin/vbot_mpc_ws/go2-convex-mpc/configs/vbot_model_poses.yaml
+bias_by_joint_type:
+  hip: -0.003275
+  thigh: 0.1118
+  calf: 1.458525
+joints:
+  FR_hip_joint:
+    scale: 1.0
+    bias: 0.1598
+
+
+  FR_thigh_joint:
+    scale: 1.0
+    bias: 0.1718
+
+  FR_calf_joint:
+    scale: 0.5
+    bias: 1.4753
+
+
+  FL_hip_joint:
+    scale: 1.0
+    bias: -0.1748
+
+
+  FL_thigh_joint:
+    scale: -1.0
+    bias: 0.0919
+
+  FL_calf_joint:
+    scale: -0.5
+    bias: 1.4770
+
+  RR_hip_joint:
+    scale: 1.0
+    bias: -0.0706
+
+  RR_thigh_joint:
+    scale: 1.0
+    bias: 0.1163
+
+  RR_calf_joint:
+    scale: 0.5
+    bias: 1.4254
+
+
+  RL_hip_joint:
+    scale: 1.0
+    bias: 0.0725
+
+  RL_thigh_joint:
+    scale: -1.0
+    bias: 0.0672
+
+  RL_calf_joint:
+    scale: -0.5
+    bias: 1.4564

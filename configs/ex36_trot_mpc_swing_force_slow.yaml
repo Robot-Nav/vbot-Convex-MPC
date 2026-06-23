@@ -1,0 +1,81 @@
+# EX36 慢速前走：支撑腿 MPC torque + 摆动腿足端 PD torque。
+# 命令行仍需要额外传 --i-accept-risk，避免误启动实物控制。
+
+args:
+  test_profile: trot-final
+  network: lo
+
+  # Python/DDS 实测 100Hz 目标通常在 75-100Hz，先保持这个目标。
+  cmd_hz: 100.0
+  state_hz: 100.0
+  leg_control_hz: 100.0
+
+  # 当前 Python/CasADi MPC wall time 常在 60ms 左右，先不要追 50Hz MPC。
+  mpc_hz: 10.0
+
+  duration: 8
+  startup_ramp_seconds: 12.0
+  prehold_seconds: 1.0
+
+  # 使用 IMU 姿态和支撑足速度估计，比 zero 速度更接近真实行走闭环。
+  use_imu_base_state: true
+  imu_rp_zero_on_start: true
+  imu_rp_zero_seconds: 0.5
+  imu_gyro_deadband: 0.005
+  fix_gateway_gyro_order: true
+  base_height_mode: stance-feet
+  base_height_clip: 0.04
+  base_vel_mode: stance-feet
+  max_base_xy_vel: 0.25
+  max_base_z_vel: 0.15
+
+  gait: trot
+  allow_swing_control: true
+  gait_warmup_s: 2.0
+  gait_frequency_hz: 1.0
+  gait_duty: 0.70
+  swing_height: 0.05
+
+  # q/qd 仍作为低层阻抗目标；swing 另外叠加足端 PD torque。
+  kp: 50.0
+  kd: 3.0
+  final_kp: 50.0
+  final_kd: 3.0
+  swing_kp: 10.0
+  swing_kd: 3.0
+  handover_seconds: 1.5
+  swing_q_target_delta_limit: 0.22
+  stance_mpc_q_delta_limit: 0.0
+
+  # 支撑腿 MPC 前馈。若方向和支撑表现正常，可逐步试 0.06 / 0.08。
+  tau_ff_scale: 0.05
+  mpc_force_xy_scale: 0.30
+
+  # 摆动腿足端 PD torque 单独缩放和限幅，先保守避免抬腿时抽动。
+  swing_tau_ff_scale: 0.20
+  swing_tau_limit: 2.0
+
+  # 明确给一个非常慢的前进速度。
+  x_vel: 0.02
+  y_vel: 0.0
+  yaw_rate: 0.0
+
+  horizon_seconds: 0.40
+  horizon_segments: 16
+  mpc_r: 3.0e-3
+  yaw_weight: 0.0
+  yaw_rate_weight: 0.0
+
+  abort_on_large_error: true
+  abort_qerr: 0.80
+  abort_swing_qerr: 1.20
+  abort_tilt: 0.35
+
+  print_hz: 2.0
+  robot_standing_supported: true
+  allow_large_gains: true
+  return_pose_on_exit: down
+  return_ramp_seconds: 5.0
+  disable_on_exit: true
+  log_dir: debug_logs/orangepi_real_mpc
+  log_prefix: ex36_trot_mpc_swing_force

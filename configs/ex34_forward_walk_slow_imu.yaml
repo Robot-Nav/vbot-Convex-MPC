@@ -1,0 +1,66 @@
+# EX34 慢速前走测试配置
+# 目标：在原地踏步基础上加入很小的 x_vel，让 swing 落脚点向前移动，
+# 同时只恢复少量 MPC 水平力，先验证“能否往前走”而不是追求速度。
+
+args:
+  # 使用 EX34 的 trot-final 实物控制流程。
+  test_profile: trot-final
+  network: lo
+
+  # 先只用 IMU 姿态，base 高度固定、速度估计置零，减少状态估计变量。
+  base_height: 0.2774
+  base_height_mode: fixed
+  base_vel_mode: zero
+  use_imu_base_state: true
+
+  # 实物前走默认使用异步 MPC：DDS lowcmd 发布和腿控制保持高频，
+  # OSQP 在后台线程更新最新支撑力。
+  async_mpc: true
+  osqp_profile: fast
+
+  # 总控制时间。真正前走时间约等于 duration - gait_warmup_s。
+  duration: 8
+  gait_warmup_s: 2
+
+  # 低频慢走。频率太快时 swing 腿跟不上，先保持 1.5Hz。
+  gait_frequency_hz: 1.5
+  gait_duty: 0.60
+
+  # 前进速度，单位 m/s。正数按模型 +x 前进；如果实物反向，先试 -0.02。
+  x_vel: 0.02
+  y_vel: 0.0
+  yaw_rate: 0.0
+
+  # swing 抬腿与跟踪。保持较大抬脚高度，避免慢走时蹭地。
+  swing_height: 0.08
+  swing_q_target_delta_limit: 0.28
+  swing_kp: 20.0
+  swing_kd: 5.0
+  swing_tau_ff_scale: 0.05
+
+  # EX23 仿真验证后迁移过来的 mixed-MPC 逻辑：支撑腿不再完全锁死
+  # stand，而是允许 MPC 力矩反推很小的 q_target 修正。真机先从小幅度
+  # 开始，确认方向/姿态/关节误差正常后再逐步增加。
+  stance_mpc_q_delta_limit: 0.02
+  stance_mpc_q_delta_scale: 0.20
+
+  # MPC 力矩注入。比原 EX35 稍强，但明显小于 EX23 仿真默认值。
+  tau_ff_scale: 0.08
+
+  # 前走需要一点水平力；真机先保守打开 10%。
+  # 如果方向明显不对：先改 0.0 排查，或改 -0.10 验证水平力符号。
+  mpc_force_xy_scale: 0.10
+
+  # EX23 中验证有效的显式前向落脚逻辑。真机先用小尺度，避免脚放太远
+  # 导致后坐或摆腿跟不上。
+  forward_touchdown: true
+  forward_touchdown_scale: 1.2
+
+  # 安全阈值。
+  abort_qerr: 0.8
+  abort_swing_qerr: 1.0
+  abort_tilt: 0.40
+  print_hz: 20
+
+  # 实物支撑确认。--i-accept-risk 仍然需要在命令行显式传入。
+  robot_standing_supported: true

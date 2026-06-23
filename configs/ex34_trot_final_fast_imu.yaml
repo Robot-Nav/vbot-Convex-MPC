@@ -1,0 +1,90 @@
+# EX34 实物 trot-final 快频率 + IMU 姿态测试配置
+# 命令行仍需要额外传 --i-accept-risk，避免误启动实物控制。
+
+args:
+  # 测试 profile：trot-final 会启用站立预备、对角踏步、MPC 支撑力。
+  test_profile: trot-final
+
+  # DDS 网络接口。lo 表示 EX34 和 dds_to_serial_gateway 都在 OrangePi 本机运行。
+  network: lo
+
+  # EX34 向低层发布 LowCmd 的目标频率，单位 Hz。
+  # 上次 200Hz 目标实际约 100Hz，先按实际能力设 100Hz，减少 DDS/Python 调度抖动。
+  cmd_hz: 100.0
+
+  # EX34 读取 DDS 状态并更新状态估计的目标频率，单位 Hz。
+  state_hz: 100.0
+
+  # 关节 PD/torque 目标更新频率，单位 Hz。
+  leg_control_hz: 100.0
+
+  # MPC QP 解算的目标频率，单位 Hz。
+  # 上次 10Hz 测试中 MPC wall time 约 68ms，state/leg 仍只到约 25Hz。
+  # 先用 5Hz 释放主循环；MPC 低频更新支撑力，LowCmd/关节目标高频发送。
+  mpc_hz: 5.0
+
+  # base 状态来源：
+  # fixed 高度 + zero 速度，可以先只验证 IMU 姿态，不让足端估计影响高度/速度。
+  base_height_mode: fixed
+  base_vel_mode: zero
+
+  # true 表示读取 gateway 发来的 IMU quaternion/gyro，用于 roll/pitch/yaw。
+  # 如果想固定姿态测试，可以命令行临时加 --fixed-base-state 覆盖。
+  use_imu_base_state: true
+
+  # 主控制阶段总时长，单位秒。真正踏步时间约等于 duration - gait_warmup_s。
+  # 超过 12 秒时，命令行需要额外加 --allow-long-duration。
+  duration: 8
+
+  # 踏步前全四腿支撑预热时间，单位秒。
+  gait_warmup_s: 2
+
+  # 步态频率，越大对角腿切换越快。
+  # 右前/左后支撑相偏转明显时，先降到 1.0Hz，让对角切换更慢、更容易观察。
+  gait_frequency_hz: 1.0
+
+  # 支撑占空比。0.70 会增加四腿 overlap，减轻纯对角支撑时的偏转。
+  gait_duty: 0.70
+
+  # swing 足端抬脚高度，单位米。太小会蹭地，太大会动作猛。
+  # 这次先减小到 0.05m，降低摆动腿对机身的扰动。
+  swing_height: 0.05
+
+  # swing IK 目标关节角相对 stand 的最大偏移，单位 rad。
+  # 这次先限制到 0.14rad，降低摆动腿目标跳变。
+  swing_q_target_delta_limit: 0.14
+
+  # swing 腿低层 PD 增益。之前 profile 默认是 3/2，3Hz 下实际关节跟不上 q_target。
+  # 这里提高到 10/3，先验证摆动腿能否真正抬起来；如果动作太冲，再降到 8/2.5。
+  swing_kp: 10.0
+  swing_kd: 3.0
+
+  # stance 腿是否根据 MPC torque 额外改变 q_target。
+  # 0.0 表示支撑腿 q_target 保持 q_stand，只靠 PD + tau_ff 支撑。
+  stance_mpc_q_delta_limit: 0.0
+
+  # MPC 支撑腿力矩前馈比例。太小撑不住，太大可能弹。
+  # tau 映射修正后，第一次实物验证先降到 0.03，确认支撑力方向正确后再加回 0.05。
+  # 常用试法：0.03 / 0.05 / 0.08 / 0.10。
+  tau_ff_scale: 0.03
+
+  # MPC 接触力的水平分量比例，只影响 fx/fy，不影响 fz。
+  # 0.0 表示只保留竖直支撑力，用来验证“力方向/横向力”是否导致晃动。
+  # 0.3 表示只保留 30% 水平力，用来测试 FR/RL 支撑相偏转是否来自 fx/fy 太激进。
+  # 1.0 表示使用完整 MPC 接触力；-1.0 可用于非常谨慎地验证水平力符号是否反了。
+  mpc_force_xy_scale: 0.3
+
+  # 安全阈值：任意关节 q_err 超过该值会退出，单位 rad。
+  abort_qerr: 0.8
+
+  # swing 腿单独 q_err 阈值，单位 rad。
+  abort_swing_qerr: 1.0
+
+  # roll/pitch 最大允许倾角，单位 rad。
+  abort_tilt: 0.35
+
+  # 终端打印频率，单位 Hz。实物测试时降低打印，减少 I/O 对控制循环的干扰。
+  print_hz: 2
+
+  # 实物支撑确认。表示当前机器人有外部保护/支撑，允许进入 EX34。
+  robot_standing_supported: true
