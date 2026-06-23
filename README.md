@@ -32,18 +32,8 @@ sim2real演示
 
 
 
-https://github.com/user-attachments/assets/1cb58046-64c2-49ea-bd32-d9af469e2309
-
-
 
 原地踏步
-
-
-https://github.com/user-attachments/assets/6a48ce10-af95-4fb3-bce4-98f23cae8d28
-
-
-
-https://github.com/user-attachments/assets/55c45696-b9cd-4c8b-9788-32f8625bca62
 
 
 
