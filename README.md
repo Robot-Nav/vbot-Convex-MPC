@@ -15,22 +15,21 @@
 - [四足机器人MPC控制：项目结构与运行指南](https://blog.csdn.net/qq_56908984/article/details/161836868?spm=1011.2415.3001.5331)
 
 ---
-sim2sim演示
+**sim2sim演示**
 
-https://github.com/user-attachments/assets/6c744851-63ee-4630-8fd7-0f04a32facda
-
-原地踏步
-
-https://github.com/user-attachments/assets/d9816d35-9ff2-4628-94db-f3e3b26c3b51
-
-行走
+| 动作 | 演示 |
+|:---:|:---:|
+| **原地踏步** | <video src="https://github.com/user-attachments/assets/d9816d35-9ff2-4628-94db-f3e3b26c3b51" width="100%" controls muted autoplay loop></video> |
+| **行走** | <video src="https://github.com/user-attachments/assets/6c744851-63ee-4630-8fd7-0f04a32facda" width="100%" controls muted autoplay loop></video> |
 
 
-sim2real演示
+**sim2real演示**
 
-详细演示，请参考[B站视频](https://www.bilibili.com/video/BV1oYj16NEtV/)
+**详细演示**，请参考[**B站视频**](https://www.bilibili.com/video/BV1oYj16NEtV/)
 
 
+
+---
 
 > PS：原项目提出MPC求解总体过程约2.7ms，但后期sim2real测试中，整体控制循环包含了MPC求解、轨迹生成、状态更新以及通信延时等等，实机时间约60ms，约15hz，因此对源代码进行了代码优化以及参数调整，例如摆腿过程等，最后可达30-40hz，满足实时性；
 
