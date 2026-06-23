@@ -35,7 +35,8 @@ sim2real演示
 
 原地踏步
 
-
+https://github.com/user-attachments/assets/90eac784-2ba8-4981-a05b-ac29a3724a55
+https://github.com/user-attachments/assets/3b265fd9-b539-4245-95b6-2cf08a7b3d17
 
 行走
 
